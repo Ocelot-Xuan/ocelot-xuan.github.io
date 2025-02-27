@@ -46,7 +46,7 @@
 
 
 
-
+<link rel="dns-prefetch" href="https://blogwaline-flaa4ii7c-lime-xuans-projects.vercel.app">
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
@@ -150,18 +150,18 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-count">7</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
       <div class="site-state-item site-state-categories">
           <a href="/categories/">
-        <span class="site-state-item-count">4</span>
+        <span class="site-state-item-count">2</span>
         <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">15</span>
+        <span class="site-state-item-count">14</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -206,10 +206,10 @@
       
       <div class="post-body"><div class="category-all-page">
   <div class="category-all-title">
-    目前共计 4 个分类
+    目前共计 2 个分类
   </div>
   <div class="category-all">
-    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E4%BA%A4%E9%80%9A/">交通</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E6%91%84%E5%BD%B1/">摄影</a><span class="category-list-count">1</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%94%9F%E6%B4%BB/">生活</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%8A%80/">科技</a><span class="category-list-count">5</span></li></ul>
+    <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%94%9F%E6%B4%BB/">生活</a><span class="category-list-count">2</span></li><li class="category-list-item"><a class="category-list-link" href="/categories/%E7%A7%91%E6%8A%80/">科技</a><span class="category-list-count">5</span></li></ul>
   </div>
 </div>
 
@@ -223,6 +223,7 @@
     
 
 
+    <div class="comments" id="waline"></div>
 </div>
   </main>
 
@@ -278,6 +279,17 @@
 
 
 
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://blogwaline-flaa4ii7c-lime-xuans-projects.vercel.app","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","locale":{"placeholder":"欢迎评论，无需登录~"},"emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo","https://unpkg.com/@waline/emojis@1.0.1/alus","https://unpkg.com/@waline/emojis@1.0.1/bilibili","https://unpkg.com/@waline/emojis@1.0.1/qq","https://unpkg.com/@waline/emojis@1.0.1/tieba","https://unpkg.com/@waline/emojis@1.0.1/tw-emoji"],"meta":["nick"],"requiredMeta":["nick"],"wordLimit":180,"login":"enable","pageSize":10,"el":"#waline","comment":true,"path":"/categories/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
 
 </body>
 </html>
