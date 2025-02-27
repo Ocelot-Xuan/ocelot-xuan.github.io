@@ -26,6 +26,6 @@ XUAN 的博客
 
 本站基于 **Hexo**，主题 **Next** ，详见页面底部说明。
 
-评论系统来自 [**Valine**](https://valine.js.org/) 。
+评论系统来自 [**Waline**](https://waline.js.org/) 。
 
 建站日期：2019年3月23日

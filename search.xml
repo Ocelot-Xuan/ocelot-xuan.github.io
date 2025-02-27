@@ -1,9 +1,114 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>Blog_building</title>
-    <url>/2025/02/27/Blog-building/</url>
-    <content><![CDATA[]]></content>
+    <title>博客重建日志</title>
+    <url>/2025/02/27/Blog%20building/</url>
+    <content><![CDATA[<h3 id="博客恢复更新啦！"><a href="#博客恢复更新啦！" class="headerlink" title="博客恢复更新啦！"></a>博客恢复更新啦！</h3><p>因 Github 用户名更改为了 Lime-Xuan ，Github Pages 域名同步更新为<code>lime-xuan.github.io</code>，原有个人域名<code>ocelot.top</code>不变，二者均可访问博客。</p>
+<p>同时，重建了博客环境，更新 Hexo 内核、NexT 主题版本，将评论系统更换为 Waline 。</p>
+<h3 id="重建日志"><a href="#重建日志" class="headerlink" title="重建日志"></a>重建日志</h3><ul>
+<li><p><strong>Hexo 环境搭建、添加搜索、字数统计功能</strong> <br><br><a href="https://zhuanlan.zhihu.com/p/618864711">Hexo+Next主题搭建个人博客+优化全过程</a></p>
+</li>
+<li><p><strong>更换 NexT 主题、外观优化</strong> <br><br><a href="https://theme-next.js.org/docs/getting-started/">NexT官方文档</a></p>
+</li>
+<li><p><strong>添加 Waline 评论系统</strong></p>
+<p>Waline 是一款轻量评论系统，评论数据默认存储在 LeanCloud，使用 Vercel 作为服务端。 <br><br>它相比 Valine 增加了后端，客户端与 LeanCloud 之间的交互会经由服务端处理，安全性更佳。 <br><br><a href="https://waline.js.org/guide/get-started/">Waline官方文档-快速上手</a></p>
+<p>NexT 主题对 Waline 没有官方支持，需要安装插件实现。 <br><br><a href="https://blog.csdn.net/jiunian_2761/article/details/122621667">Hexo博客进阶：为 Next 主题添加 Waline 评论系统</a> <br><br><a href="https://www.npmjs.com/package/@waline/hexo-next?activeTab=readme">npm - Next主题Waline插件</a></p>
+<p>另外需要注意，Vercel 提供的服务端域名<code>vercel.app</code>在国内无法直接访问，需要将一个自有域名（子域名亦可）CNAME到<code>cname.vercel-dns.com</code>，之后使用自有域名进行配置和数据传递。详见 Waline 官方手册“绑定域名”一章。</p>
+</li>
+</ul>
+]]></content>
+      <categories>
+        <category>科技</category>
+      </categories>
+      <tags>
+        <tag>Web</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>装一台10代i3核显 ITX 小主机</title>
+    <url>/2022/03/26/ITX/</url>
+    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(1).jpg" alt="ITX (1)"></p>
+<span id="more"></span>
+
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文写于2022&#x2F;3&#x2F;26，约 1200 字，阅读大约需要 3 分钟。</p>
+<p>自从前年矿潮我把580卖掉之后，家里的台式机就变成了 <strong>3500X+亮机卡</strong> 的奇怪组合。关键是闲鱼买的亮机卡太老，驱动兼容性不好，性能也不行，B站看视频都偶尔崩溃，于是决定拆开卖了重新配一台。因为现在基本没有游戏需求了，所以想着装一台核显ITX，把主机移到桌面上来，好让放腿脚的空间更大一些。去年底开始策划新电脑，没赶上双十一，就在双十二入手了这套 <strong>10代i3+核显+H510ITX</strong> 。</p>
+<br/>
+
+<p><strong>详细配置表：</strong></p>
+<p>CPU：<strong>i3 10105</strong>  4核8线程  3.7-4.4GHz</p>
+<p>显卡：UHD630</p>
+<p>主板：铭瑄 MS-挑战者 H510 ITX</p>
+<p>内存：DDR4 16G（8G-3000*2，老电脑拆下来的）</p>
+<p>硬盘：英特尔 760P（也是老电脑拆下来的）</p>
+<p>机箱：游戏帝国 小灵越（自带200W电源）</p>
+<br/>
+
+<p>这台电脑是21年12月购置的，当时这套配置几乎没有悬念，原来的主机二手能卖1500左右，这个价位要买到 新U+ITX板+机箱+电源+散热器，当时12代U还没有上市，10代i3+ITX主板 就在1000左右，加上机箱什么的还能有些富余。如果选 10代i5 要再加300，会有点超支，最后决定还是留给以后升级。而AMD这边则是没有好的选择，带核显的APU 2、3、4代都已经退市，缺货且价格高企。5代APU已经上市的最少都是6核，散片也要上千，不在我们的价格区间。</p>
+<br/>
+
+<h3 id="装机过程"><a href="#装机过程" class="headerlink" title="装机过程"></a>装机过程</h3><p>先看看主板和U：</p>
+<p><strong>i3 10105</strong>，带核显的版本，比屏蔽核显的F版本贵150左右。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(2).jpg" alt="ITX (2)"></p>
+<p>i3发热量很小，所以搭配了一个简单下压式散热 大镰刀S950M 。</p>
+<br/>
+
+<p>主板使用了 <strong>铭瑄 MS-挑战者 H510 ITX</strong> 。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(3).jpg" alt="ITX (3)"></p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(4).jpg" alt="ITX (4)"></p>
+<p>这是一个比较廉价的H510 ITX主板，提供2条内存插槽，6个后置USB（2.0<code>*</code>4 + 3.0<code>*</code>2)，一条M.2 。供电可以比较平稳地带动10代i5不带K的版本，但BIOS比较简陋，适合不折腾直接用的用户，也暂不支持装Win11。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(5).jpg" alt="ITX (5)"></p>
+<p>另外根据电脑吧评测室大佬 C.Y. 的测试，这个主板如果做好MOS散热也可以带11代i5无K版本，高负载要稳定运行则需要通过软件（XTU、throttlestop）解锁功耗墙、CPU降压。</p>
+<p>主板带有 M.2 Wi-Fi 接口，也送了保护罩，但因为H510芯片组 USB2.0 数量限制，用M.2无线网卡 蓝牙会不能用，所以选择了USB无线网卡。</p>
+<br/>
+
+<p>装进机箱：</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(6).jpg" alt="ITX (6)"></p>
+<p>ITX机箱采用 <strong>游戏帝国 小灵越 机箱</strong> ，其实就是迎广肖邦的仿制品，价格比较低。前置USB2.0、3.0各一个 + 音频接口 + 读卡器。接口这边侧板是镂空网状，可以帮助散热。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(7).jpg" alt="ITX (7)"></p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(8).jpg" alt="ITX (8)"></p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(9).jpg" alt="ITX (9)"></p>
+<p>机箱自带200W电源，带核显i3完全没有问题。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(10).png" alt="ITX (10)"></p>
+<br/>
+
+<p>另外这个主板只有1个前置USB2.0插针，为了接上机箱的2.0 + 读卡器，还要买一个转接板。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(11).jpg" alt="ITX (11)"></p>
+<br/>
+
+<p>插上所有线，此时线缆是一团乱麻的状态。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(12).jpg" alt="ITX (12)"></p>
+<p>整理好线缆，比较乱也没办法了，机箱小 线缆多，ITX确实不好理线：</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(13).jpg" alt="ITX (13)"></p>
+<p>合盖：</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(14).jpg" alt="ITX (14)"></p>
+<br/>
+
+<p>最终效果：</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(15).jpg" alt="ITX (15)"></p>
+<br/>
+
+<p>另外介绍一下添置的外设：</p>
+<p>显示器是 <strong>LG的24GN600</strong> ，24寸 1080P 144Hz IPS。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(16).jpg" alt="ITX (16)"></p>
+<p>还有校色报告，最大ΔE&lt;5，色温6500K。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(17).jpg" alt="ITX (17)"></p>
+<br/>
+
+<p>键盘是 <strong>京东京造C2</strong> ，有线104，佳达隆红轴，带白色背光。属于长得比较朴素的键盘，价格200多也不贵。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(18).jpg" alt="ITX (18)"></p>
+<br/>
+
+<p>桌面焕然一新 ^o^&#x2F; ，最大的好处是脚下空间腾出来了，可以随意放腿（￣︶￣）</p>
+<p>装好之后的ITX看上去还是很舒服的，小巧不占空间，也显得精致。不玩游戏的话，性能也够用了。这次装机就记录到这里了，感谢观看~</p>
+]]></content>
+      <categories>
+        <category>科技</category>
+      </categories>
+      <tags>
+        <tag>电脑</tag>
+        <tag>装机</tag>
+        <tag>ITX</tag>
+      </tags>
   </entry>
   <entry>
     <title>ColorOS7 For Realme X 尝鲜体验感受</title>
@@ -97,101 +202,6 @@
         <tag>评测</tag>
         <tag>安卓</tag>
         <tag>Realme</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Happy New Year!</title>
-    <url>/2020/01/01/Happy%20new%20year/</url>
-    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Hello20S_tiny.png" alt="Hello20S_tiny"></p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>装一台10代i3核显 ITX 小主机</title>
-    <url>/2022/03/26/ITX/</url>
-    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(1).jpg" alt="ITX (1)"></p>
-<span id="more"></span>
-
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文写于2022&#x2F;3&#x2F;26，约 1200 字，阅读大约需要 3 分钟。</p>
-<p>自从前年矿潮我把580卖掉之后，家里的台式机就变成了 <strong>3500X+亮机卡</strong> 的奇怪组合。关键是闲鱼买的亮机卡太老，驱动兼容性不好，性能也不行，B站看视频都偶尔崩溃，于是决定拆开卖了重新配一台。因为现在基本没有游戏需求了，所以想着装一台核显ITX，把主机移到桌面上来，好让放腿脚的空间更大一些。去年底开始策划新电脑，没赶上双十一，就在双十二入手了这套 <strong>10代i3+核显+H510ITX</strong> 。</p>
-<br/>
-
-<p><strong>详细配置表：</strong></p>
-<p>CPU：<strong>i3 10105</strong>  4核8线程  3.7-4.4GHz</p>
-<p>显卡：UHD630</p>
-<p>主板：铭瑄 MS-挑战者 H510 ITX</p>
-<p>内存：DDR4 16G（8G-3000*2，老电脑拆下来的）</p>
-<p>硬盘：英特尔 760P（也是老电脑拆下来的）</p>
-<p>机箱：游戏帝国 小灵越（自带200W电源）</p>
-<br/>
-
-<p>这台电脑是21年12月购置的，当时这套配置几乎没有悬念，原来的主机二手能卖1500左右，这个价位要买到 新U+ITX板+机箱+电源+散热器，当时12代U还没有上市，10代i3+ITX主板 就在1000左右，加上机箱什么的还能有些富余。如果选 10代i5 要再加300，会有点超支，最后决定还是留给以后升级。而AMD这边则是没有好的选择，带核显的APU 2、3、4代都已经退市，缺货且价格高企。5代APU已经上市的最少都是6核，散片也要上千，不在我们的价格区间。</p>
-<br/>
-
-<h3 id="装机过程"><a href="#装机过程" class="headerlink" title="装机过程"></a>装机过程</h3><p>先看看主板和U：</p>
-<p><strong>i3 10105</strong>，带核显的版本，比屏蔽核显的F版本贵150左右。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(2).jpg" alt="ITX (2)"></p>
-<p>i3发热量很小，所以搭配了一个简单下压式散热 大镰刀S950M 。</p>
-<br/>
-
-<p>主板使用了 <strong>铭瑄 MS-挑战者 H510 ITX</strong> 。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(3).jpg" alt="ITX (3)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(4).jpg" alt="ITX (4)"></p>
-<p>这是一个比较廉价的H510 ITX主板，提供2条内存插槽，6个后置USB（2.0<code>*</code>4 + 3.0<code>*</code>2)，一条M.2 。供电可以比较平稳地带动10代i5不带K的版本，但BIOS比较简陋，适合不折腾直接用的用户，也暂不支持装Win11。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(5).jpg" alt="ITX (5)"></p>
-<p>另外根据电脑吧评测室大佬 C.Y. 的测试，这个主板如果做好MOS散热也可以带11代i5无K版本，高负载要稳定运行则需要通过软件（XTU、throttlestop）解锁功耗墙、CPU降压。</p>
-<p>主板带有 M.2 Wi-Fi 接口，也送了保护罩，但因为H510芯片组 USB2.0 数量限制，用M.2无线网卡 蓝牙会不能用，所以选择了USB无线网卡。</p>
-<br/>
-
-<p>装进机箱：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(6).jpg" alt="ITX (6)"></p>
-<p>ITX机箱采用 <strong>游戏帝国 小灵越 机箱</strong> ，其实就是迎广肖邦的仿制品，价格比较低。前置USB2.0、3.0各一个 + 音频接口 + 读卡器。接口这边侧板是镂空网状，可以帮助散热。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(7).jpg" alt="ITX (7)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(8).jpg" alt="ITX (8)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(9).jpg" alt="ITX (9)"></p>
-<p>机箱自带200W电源，带核显i3完全没有问题。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(10).png" alt="ITX (10)"></p>
-<br/>
-
-<p>另外这个主板只有1个前置USB2.0插针，为了接上机箱的2.0 + 读卡器，还要买一个转接板。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(11).jpg" alt="ITX (11)"></p>
-<br/>
-
-<p>插上所有线，此时线缆是一团乱麻的状态。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(12).jpg" alt="ITX (12)"></p>
-<p>整理好线缆，比较乱也没办法了，机箱小 线缆多，ITX确实不好理线：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(13).jpg" alt="ITX (13)"></p>
-<p>合盖：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(14).jpg" alt="ITX (14)"></p>
-<br/>
-
-<p>最终效果：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(15).jpg" alt="ITX (15)"></p>
-<br/>
-
-<p>另外介绍一下添置的外设：</p>
-<p>显示器是 <strong>LG的24GN600</strong> ，24寸 1080P 144Hz IPS。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(16).jpg" alt="ITX (16)"></p>
-<p>还有校色报告，最大ΔE&lt;5，色温6500K。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(17).jpg" alt="ITX (17)"></p>
-<br/>
-
-<p>键盘是 <strong>京东京造C2</strong> ，有线104，佳达隆红轴，带白色背光。属于长得比较朴素的键盘，价格200多也不贵。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(18).jpg" alt="ITX (18)"></p>
-<br/>
-
-<p>桌面焕然一新 ^o^&#x2F; ，最大的好处是脚下空间腾出来了，可以随意放腿（￣︶￣）</p>
-<p>装好之后的ITX看上去还是很舒服的，小巧不占空间，也显得精致。不玩游戏的话，性能也够用了。这次装机就记录到这里了，感谢观看~</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>电脑</tag>
-        <tag>装机</tag>
-        <tag>ITX</tag>
       </tags>
   </entry>
   <entry>
@@ -369,6 +379,15 @@
         <tag>DIY</tag>
         <tag>ESP8266</tag>
       </tags>
+  </entry>
+  <entry>
+    <title>Happy New Year!</title>
+    <url>/2020/01/01/Happy%20new%20year/</url>
+    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Hello20S_tiny.png" alt="Hello20S_tiny"></p>
+]]></content>
+      <categories>
+        <category>生活</category>
+      </categories>
   </entry>
   <entry>
     <title>NOIP2018 参赛纪念</title>
