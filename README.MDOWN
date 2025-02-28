@@ -4,13 +4,13 @@ date: 2025-02-26 23:08:00
 ---
 #### 关于我
 
-Hello~
+Hello~ 我是Ocelot-XUAN。
 
-科技迷，电子DIY爱好者。日常折腾 单片机/PCB/电脑，也关注航天、交通……
+科技迷，电子DIY爱好者。日常研究嵌入式开发/PCB/网络技术……
 
 UESTC 网络工程在读，电子设计退役老人。
 
-[**Github**](https://github.com/Lime-Xuan) 和 [**微博**](https://weibo.com/u/2379418717) 见侧栏头像下方。
+[**Github**](https://github.com/Ocelot-Xuan) 和 [**微博**](https://weibo.com/u/2379418717) 见侧栏头像下方。
 
 #### 关于本站
 
@@ -20,7 +20,7 @@ XUAN 的博客
 
 摸鱼不定时更新。
 
-站点托管于 [**Github Pages**](https://github.com/Lime-Xuan/lime-xuan.github.io)
+站点托管于 [**Github Pages**](https://github.com/Ocelot-Xuan/ocelot-xuan.github.io)
 
 域名：ocelot.top / ocelot-xuan.github.io
 
