@@ -18,6 +18,8 @@
 <p><a href="https://blog.csdn.net/jiunian_2761/article/details/122621667">Hexo博客进阶：为 Next 主题添加 Waline 评论系统</a><br><a href="https://www.npmjs.com/package/@waline/hexo-next?activeTab=readme">npm - Next主题Waline插件</a></p>
 <p>另外需要注意，Vercel 提供的服务端域名<code>vercel.app</code>在国内无法直接访问，需要将一个自有域名（子域名亦可）CNAME到<code>cname.vercel-dns.com</code>，之后使用自有域名进行配置和数据传递。详见 Waline 官方手册“绑定域名”一章。</p>
 </li>
+<li><p><strong>添加友链</strong><br>  <a href="https://finisky.github.io/simplestblogroll/">最简单的Hexo友情链接页面定制</a></p>
+</li>
 <li><p><strong>设定 Github Pages 自定义域名 及 域名DNS解析</strong><br><a href="https://www.bandao.ltd/tutorial/github_domain.html">GitHub Pages 自定义域名配置指南</a></p>
 </li>
 </ul>
