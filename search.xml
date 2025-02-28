@@ -88,7 +88,7 @@
         <category>科技</category>
       </categories>
       <tags>
-        <tag>单片机</tag>
+        <tag>嵌入式</tag>
         <tag>电子设计</tag>
         <tag>STM32</tag>
       </tags>
@@ -175,8 +175,6 @@
       </categories>
       <tags>
         <tag>电脑</tag>
-        <tag>装机</tag>
-        <tag>ITX</tag>
       </tags>
   </entry>
   <entry>
@@ -260,8 +258,7 @@
         <category>科技</category>
       </categories>
       <tags>
-        <tag>单片机</tag>
-        <tag>DIY</tag>
+        <tag>嵌入式</tag>
         <tag>ESP8266</tag>
       </tags>
   </entry>
@@ -349,10 +346,7 @@
         <category>科技</category>
       </categories>
       <tags>
-        <tag>手机</tag>
-        <tag>评测</tag>
         <tag>安卓</tag>
-        <tag>小米</tag>
       </tags>
   </entry>
   <entry>
@@ -452,10 +446,7 @@
         <category>科技</category>
       </categories>
       <tags>
-        <tag>手机</tag>
-        <tag>评测</tag>
         <tag>安卓</tag>
-        <tag>Realme</tag>
       </tags>
   </entry>
   <entry>
