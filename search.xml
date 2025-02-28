@@ -3,7 +3,7 @@
   <entry>
     <title>Hexo+NexT 博客重建日志</title>
     <url>/2025/02/27/Blog%20building/</url>
-    <content><![CDATA[<h3 id="博客恢复更新啦！"><a href="#博客恢复更新啦！" class="headerlink" title="博客恢复更新啦！"></a>博客恢复更新啦！</h3><p>因 Github 用户名更改为了 Lime-Xuan ，Github Pages 域名同步更新为<code>lime-xuan.github.io</code>，原有个人域名<code>ocelot.top</code>不变，二者均可访问博客。<br>同时，重建了博客环境，更新 Hexo 内核、NexT 主题版本，将评论系统更换为 Waline 。</p>
+    <content><![CDATA[<h3 id="博客恢复更新啦！"><a href="#博客恢复更新啦！" class="headerlink" title="博客恢复更新啦！"></a>博客恢复更新啦！</h3><p>因 Github 用户名更改为了 Ocelot-Xuan ，Github Pages 域名同步更新为<code>ocelot-xuan.github.io</code>，原有个人域名<code>ocelot.top</code>不变，二者均可访问博客。<br>同时，重建了博客环境，更新 Hexo 内核、NexT 主题版本，将评论系统更换为 Waline 。</p>
 <span id="more"></span>
 <h3 id="重建日志"><a href="#重建日志" class="headerlink" title="重建日志"></a>重建日志</h3><ul>
 <li><p><strong>Hexo 环境搭建、添加搜索、字数统计功能</strong><br><a href="https://zhuanlan.zhihu.com/p/618864711">Hexo+Next主题搭建个人博客+优化全过程</a></p>

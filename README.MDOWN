@@ -24,7 +24,7 @@ XUAN 的博客
 
 域名：ocelot.top / lime-xuan.github.io
 
-本站基于 **Hexo**，主题 **Next** ，详见页面底部说明。
+本站基于 **Hexo**，主题 **NexT** ，详见页面底部说明。
 
 评论系统来自 [**Waline**](https://waline.js.org/) 。
 
