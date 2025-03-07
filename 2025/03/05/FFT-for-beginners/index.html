@@ -1,9 +1,420 @@
-<?xml version="1.0" encoding="utf-8"?>
-<search>
-  <entry>
-    <title>快速傅里叶变换（FFT）通俗入门</title>
-    <url>/2025/03/05/FFT-for-beginners/</url>
-    <content><![CDATA[<p><strong>【写在前面】</strong> 这篇文章写给尚未系统性学习信号理论的读者，主要使用通俗的语言描述FFT在信号处理中的应用。本文原面向参加大学生电子设计竞赛的大学一年级学生，使其快速理解信号处理算法，并能在单片机、FPGA等设备上使用FFT。如果你希望了解FFT算法原理和优化等内容，不妨阅读更专业的文章或书籍。</p>
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 7.3.0">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css" integrity="sha256-dABdfBfUoC8vJUBOwGVdm8L9qlMWaHTIfXt+7GnZCIo=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"ocelot-xuan.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.22.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"copycode":{"enable":false,"style":null},"fold":{"enable":false,"height":500},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"},"path":"/search.xml","localsearch":{"enable":true,"top_n_per_article":1,"unescape":false,"preload":false}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="【写在前面】 这篇文章写给尚未系统性学习信号理论的读者，主要使用通俗的语言描述FFT在信号处理中的应用。本文原面向参加大学生电子设计竞赛的大学一年级学生，使其快速理解信号处理算法，并能在单片机、FPGA等设备上使用FFT。如果你希望了解FFT算法原理和优化等内容，不妨阅读更专业的文章或书籍。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="快速傅里叶变换（FFT）通俗入门">
+<meta property="og:url" content="http://ocelot-xuan.github.io/2025/03/05/FFT-for-beginners/index.html">
+<meta property="og:site_name" content="Ocelot-XUAN 的博客">
+<meta property="og:description" content="【写在前面】 这篇文章写给尚未系统性学习信号理论的读者，主要使用通俗的语言描述FFT在信号处理中的应用。本文原面向参加大学生电子设计竞赛的大学一年级学生，使其快速理解信号处理算法，并能在单片机、FPGA等设备上使用FFT。如果你希望了解FFT算法原理和优化等内容，不妨阅读更专业的文章或书籍。">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine.svg">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine_with_coordinate.svg">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_frequency_spectrum.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_square.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sampling_1.svg">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sampling_2.svg">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine_spectrum.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine_spectrum.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_continuous.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_window.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_fence.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_aliasing.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_undersampling.png">
+<meta property="article:published_time" content="2025-03-05T04:50:17.000Z">
+<meta property="article:modified_time" content="2025-03-07T14:31:05.970Z">
+<meta property="article:author" content="Zixuan Zhang">
+<meta property="article:tag" content="电子设计">
+<meta property="article:tag" content="信号处理">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine.svg">
+
+
+<link rel="canonical" href="http://ocelot-xuan.github.io/2025/03/05/FFT-for-beginners/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"http://ocelot-xuan.github.io/2025/03/05/FFT-for-beginners/","path":"2025/03/05/FFT-for-beginners/","title":"快速傅里叶变换（FFT）通俗入门"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>快速傅里叶变换（FFT）通俗入门 | Ocelot-XUAN 的博客</title>
+  
+
+
+
+
+
+
+
+<link rel="dns-prefetch" href="https://comment.ocelot.top">
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<style>mjx-container[jax="SVG"] {
+  direction: ltr;
+}
+
+mjx-container[jax="SVG"] > svg {
+  overflow: visible;
+}
+
+mjx-container[jax="SVG"][display="true"] {
+  display: block;
+  text-align: center;
+  margin: 1em 0;
+}
+
+mjx-container[jax="SVG"][justify="left"] {
+  text-align: left;
+}
+
+mjx-container[jax="SVG"][justify="right"] {
+  text-align: right;
+}
+
+g[data-mml-node="merror"] > g {
+  fill: red;
+  stroke: red;
+}
+
+g[data-mml-node="merror"] > rect[data-background] {
+  fill: yellow;
+  stroke: none;
+}
+
+g[data-mml-node="mtable"] > line[data-line] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > rect[data-frame] {
+  stroke-width: 70px;
+  fill: none;
+}
+
+g[data-mml-node="mtable"] > .mjx-dashed {
+  stroke-dasharray: 140;
+}
+
+g[data-mml-node="mtable"] > .mjx-dotted {
+  stroke-linecap: round;
+  stroke-dasharray: 0,140;
+}
+
+g[data-mml-node="mtable"] > svg {
+  overflow: visible;
+}
+
+[jax="SVG"] mjx-tool {
+  display: inline-block;
+  position: relative;
+  width: 0;
+  height: 0;
+}
+
+[jax="SVG"] mjx-tool > mjx-tip {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+mjx-tool > mjx-tip {
+  display: inline-block;
+  padding: .2em;
+  border: 1px solid #888;
+  font-size: 70%;
+  background-color: #F8F8F8;
+  color: black;
+  box-shadow: 2px 2px 5px #AAAAAA;
+}
+
+g[data-mml-node="maction"][data-toggle] {
+  cursor: pointer;
+}
+
+mjx-status {
+  display: block;
+  position: fixed;
+  left: 1em;
+  bottom: 1em;
+  min-width: 25%;
+  padding: .2em .4em;
+  border: 1px solid #888;
+  font-size: 90%;
+  background-color: #F8F8F8;
+  color: black;
+}
+
+foreignObject[data-mjx-xml] {
+  font-family: initial;
+  line-height: normal;
+  overflow: visible;
+}
+
+.MathJax path {
+  stroke-width: 3;
+}
+
+mjx-container[display="true"] {
+  overflow: auto hidden;
+}
+
+mjx-container[display="true"] + br {
+  display: none;
+}
+</style></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Ocelot-XUAN 的博客</p>
+      <i class="logo-line"></i>
+    </a>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+        <i class="fa fa-search fa-fw fa-lg"></i>
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa fa-home fa-fw"></i>首页</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa fa-user fa-fw"></i>关于</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa fa-th fa-fw"></i>分类</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa fa-archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-link"><a href="/links/" rel="section"><i class="fa fa-link fa-fw"></i>友链</a></li>
+      <li class="menu-item menu-item-search">
+        <a role="button" class="popup-trigger"><i class="fa fa-search fa-fw"></i>搜索
+        </a>
+      </li>
+  </ul>
+</nav>
+
+
+
+  <div class="search-pop-overlay">
+    <div class="popup search-popup">
+      <div class="search-header">
+        <span class="search-icon">
+          <i class="fa fa-search"></i>
+        </span>
+        <div class="search-input-container">
+          <input autocomplete="off" autocapitalize="off" maxlength="80"
+                placeholder="搜索..." spellcheck="false"
+                type="search" class="search-input">
+        </div>
+        <span class="popup-btn-close" role="button">
+          <i class="fa fa-times-circle"></i>
+        </span>
+      </div>
+      <div class="search-result-container">
+        <div class="search-result-icon">
+          <i class="fa fa-spinner fa-pulse fa-5x"></i>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E4%BF%A1%E5%8F%B7%E7%9A%84%E9%A2%91%E5%9F%9F%E5%88%86%E6%9E%90"><span class="nav-number">1.</span> <span class="nav-text">1. 信号的频域分析</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-1-%E4%BB%80%E4%B9%88%E6%98%AF%E9%A2%91%E5%9F%9F%E3%80%81%E9%A2%91%E8%B0%B1"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 什么是频域、频谱</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-2-FFT%E6%98%AF%E5%81%9A%E4%BB%80%E4%B9%88%E7%9A%84"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 FFT是做什么的</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#1-3-%E5%B8%B8%E8%A7%81%E4%BF%A1%E5%8F%B7%E7%9A%84%E9%A2%91%E8%B0%B1"><span class="nav-number">1.3.</span> <span class="nav-text">1.3 常见信号的频谱</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-FFT%E7%AE%97%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">2. FFT算法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E9%87%87%E6%A0%B7%E4%B8%8E%E9%87%87%E6%A0%B7%E5%AE%9A%E7%90%86"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 采样与采样定理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-FFT%E7%9A%84%E7%BB%93%E6%9E%9C"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 FFT的结果</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E9%A2%91%E8%B0%B1%E6%B3%84%E9%9C%B2%E5%92%8C%E7%AA%97%E5%87%BD%E6%95%B0"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 频谱泄露和窗函数</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-4-%E6%A0%85%E6%A0%8F%E6%95%88%E5%BA%94"><span class="nav-number">2.4.</span> <span class="nav-text">2.4 栅栏效应</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-5-%E9%A2%91%E8%B0%B1%E6%B7%B7%E5%8F%A0"><span class="nav-number">2.5.</span> <span class="nav-text">2.5 频谱混叠</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-FFT%E5%9C%A8STM32%E4%B8%8A%E7%9A%84%E5%AE%9E%E7%8E%B0"><span class="nav-number">3.</span> <span class="nav-text">3. FFT在STM32上的实现</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%85%B3%E4%BA%8EFFT%E7%9A%84%E4%BB%8B%E7%BB%8D%E5%B0%B1%E5%88%B0%E8%BF%99%E9%87%8C%E4%BA%86%EF%BC%8C%E6%84%9F%E8%B0%A2%E4%BD%A0%E8%AF%BB%E5%AE%8C%E8%BF%99%E7%AF%87%E6%96%87%E7%AB%A0%EF%BC%81%E5%A6%82%E6%9E%9C%E6%96%87%E4%B8%AD%E5%87%BA%E7%8E%B0%E4%BA%86%E4%BB%BB%E4%BD%95%E9%94%99%E8%AF%AF%EF%BC%8C%E6%88%96%E8%80%85%E4%BD%A0%E6%83%B3%E6%B7%B1%E5%85%A5%E8%AE%A8%E8%AE%BA%E6%9F%90%E4%B8%AA%E7%9F%A5%E8%AF%86%E7%82%B9%EF%BC%8C%E6%AC%A2%E8%BF%8E%E5%9C%A8%E8%AF%84%E8%AE%BA%E5%8C%BA%E7%95%99%E8%A8%80"><span class="nav-number">3.1.</span> <span class="nav-text">关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言~</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">4.</span> <span class="nav-text">4. 参考资料</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Zixuan Zhang"
+      src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Avatar_tiny.jpg">
+  <p class="site-author-name" itemprop="name">Zixuan Zhang</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">9</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">3</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">9</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Ocelot-Xuan" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Ocelot-Xuan" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://weibo.com/u/2379418717" title="Weibo → https:&#x2F;&#x2F;weibo.com&#x2F;u&#x2F;2379418717" rel="noopener me" target="_blank"><i class="fab fa-weibo fa-fw"></i>Weibo</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="http://ocelot-xuan.github.io/2025/03/05/FFT-for-beginners/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Avatar_tiny.jpg">
+      <meta itemprop="name" content="Zixuan Zhang">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Ocelot-XUAN 的博客">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="快速傅里叶变换（FFT）通俗入门 | Ocelot-XUAN 的博客">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          快速傅里叶变换（FFT）通俗入门
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2025-03-05 12:50:17" itemprop="dateCreated datePublished" datetime="2025-03-05T12:50:17+08:00">2025-03-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2025-03-07 22:31:05" itemprop="dateModified" datetime="2025-03-07T22:31:05+08:00">2025-03-07</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E7%9F%A5%E8%AF%86/" itemprop="url" rel="index"><span itemprop="name">知识</span></a>
+        </span>
+    </span>
+
+  
+  
+  <span class="post-meta-item">
+    
+    <span class="post-meta-item-icon">
+      <i class="far fa-comment"></i>
+    </span>
+    <span class="post-meta-item-text">Waline：</span>
+  
+    <a title="waline" href="/2025/03/05/FFT-for-beginners/#waline" itemprop="discussionUrl">
+      <span class="post-comments-count waline-comment-count" data-path="/2025/03/05/FFT-for-beginners/" itemprop="commentCount"></span>
+    </a>
+  </span>
+  
+  
+    <span class="post-meta-break"></span>
+    <span class="post-meta-item" title="本文字数">
+      <span class="post-meta-item-icon">
+        <i class="far fa-file-word"></i>
+      </span>
+      <span class="post-meta-item-text">本文字数：</span>
+      <span>4.1k</span>
+    </span>
+    <span class="post-meta-item" title="阅读时长">
+      <span class="post-meta-item-icon">
+        <i class="far fa-clock"></i>
+      </span>
+      <span class="post-meta-item-text">阅读时长 &asymp;</span>
+      <span>7 分钟</span>
+    </span>
+</div>
+
+          
+          
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p><strong>【写在前面】</strong> 这篇文章写给尚未系统性学习信号理论的读者，主要使用通俗的语言描述FFT在信号处理中的应用。本文原面向参加大学生电子设计竞赛的大学一年级学生，使其快速理解信号处理算法，并能在单片机、FPGA等设备上使用FFT。如果你希望了解FFT算法原理和优化等内容，不妨阅读更专业的文章或书籍。</p>
 <span id="more"></span>
 <h3 id="1-信号的频域分析"><a href="#1-信号的频域分析" class="headerlink" title="1. 信号的频域分析"></a>1. 信号的频域分析</h3><h4 id="1-1-什么是频域、频谱"><a href="#1-1-什么是频域、频谱" class="headerlink" title="1.1 什么是频域、频谱"></a>1.1 什么是频域、频谱</h4><p>这是一个我们通常说的正弦波：<br><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine.svg" alt="FFT_正弦"></p>
 <p>如果给这个图像加上坐标轴，就是一个横轴为时间 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="0.817ex" height="1.441ex" role="img" focusable="false" viewBox="0 -626 361 637"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D461" d="M26 385Q19 392 19 395Q19 399 22 411T27 425Q29 430 36 430T87 431H140L159 511Q162 522 166 540T173 566T179 586T187 603T197 615T211 624T229 626Q247 625 254 615T261 596Q261 589 252 549T232 470L222 433Q222 431 272 431H323Q330 424 330 420Q330 398 317 385H210L174 240Q135 80 135 68Q135 26 162 26Q197 26 230 60T283 144Q285 150 288 151T303 153H307Q322 153 322 145Q322 142 319 133Q314 117 301 95T267 48T216 6T155 -11Q125 -11 98 4T59 56Q57 64 57 83V101L92 241Q127 382 128 383Q128 385 77 385H26Z"></path></g></g></g></svg></mjx-container>，纵轴为电压 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: -0.025ex;" xmlns="http://www.w3.org/2000/svg" width="1.294ex" height="1.025ex" role="img" focusable="false" viewBox="0 -442 572 453"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D462" d="M21 287Q21 295 30 318T55 370T99 420T158 442Q204 442 227 417T250 358Q250 340 216 246T182 105Q182 62 196 45T238 27T291 44T328 78L339 95Q341 99 377 247Q407 367 413 387T427 416Q444 431 463 431Q480 431 488 421T496 402L420 84Q419 79 419 68Q419 43 426 35T447 26Q469 29 482 57T512 145Q514 153 532 153Q551 153 551 144Q550 139 549 130T540 98T523 55T498 17T462 -8Q454 -10 438 -10Q372 -10 347 46Q345 45 336 36T318 21T296 6T267 -6T233 -11Q189 -11 155 7Q103 38 103 113Q103 170 138 262T173 379Q173 380 173 381Q173 390 173 393T169 400T158 404H154Q131 404 112 385T82 344T65 302T57 280Q55 278 41 278H27Q21 284 21 287Z"></path></g></g></g></svg></mjx-container>（或者说振幅 <mjx-container class="MathJax" jax="SVG"><svg style="vertical-align: 0;" xmlns="http://www.w3.org/2000/svg" width="1.697ex" height="1.62ex" role="img" focusable="false" viewBox="0 -716 750 716"><g stroke="currentColor" fill="currentColor" stroke-width="0" transform="scale(1,-1)"><g data-mml-node="math"><g data-mml-node="mi"><path data-c="1D434" d="M208 74Q208 50 254 46Q272 46 272 35Q272 34 270 22Q267 8 264 4T251 0Q249 0 239 0T205 1T141 2Q70 2 50 0H42Q35 7 35 11Q37 38 48 46H62Q132 49 164 96Q170 102 345 401T523 704Q530 716 547 716H555H572Q578 707 578 706L606 383Q634 60 636 57Q641 46 701 46Q726 46 726 36Q726 34 723 22Q720 7 718 4T704 0Q701 0 690 0T651 1T578 2Q484 2 455 0H443Q437 6 437 9T439 27Q443 40 445 43L449 46H469Q523 49 533 63L521 213H283L249 155Q208 86 208 74ZM516 260Q516 271 504 416T490 562L463 519Q447 492 400 412L310 260L413 259Q516 259 516 260Z"></path></g></g></g></svg></mjx-container>）的图像:<br><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/FFT_sine_with_coordinate.svg" alt="FFT_正弦_带坐标"></p>
@@ -62,491 +473,107 @@
 <p>如果你想了解关于采样和混叠更详细的介绍，还可以阅读Analog Devices公司编写的MT-002指南：《奈奎斯特准则对数据采样系统设计有何意义》。</p>
 <h3 id="3-FFT在STM32上的实现"><a href="#3-FFT在STM32上的实现" class="headerlink" title="3. FFT在STM32上的实现"></a>3. FFT在STM32上的实现</h3><p>ST官方的 CMSIS DSP 库中提供了多种FFT实现，常用的有处理实信号的 <code>arm_rfft_fast_f32</code> 和处理复信号的 <code>arm_cfft_f32</code>。库中也提供了 <code>arm_cmplx_mag_f32</code> 函数来对FFT输出的复数数据取模。另外，ST也提供使用汇编语言编写的版本 <code>cr4_fft_X_stm32</code>（X为FFT点数）。</p>
 <p>我们生活中处理的信号都是实信号，使用面向实信号的函数能加快运算速度。同时，这些函数有不同的数据格式，具体的使用方法可以参考 CMSIS DSP 库官方文档和互联网上的资料。</p>
-<h4 id="关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言"><a href="#关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言" class="headerlink" title="关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言~"></a>关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言~</h4><h3 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h3><p><a href="https://zhuanlan.zhihu.com/p/611517669">实战数字信号处理之三 - 从FFT得到幅值和相位信息</a><br><a href="https://blog.csdn.net/weixin_45692672/article/details/113797031">FFT与窗函数：信号分析中的关键技术</a><br><a href="https://zhuanlan.zhihu.com/p/585401909">带通采样定理及其公式推导</a><br><a href="https://www.analog.com/media/cn/training-seminars/tutorials/mt-002_cn.pdf">Analog Devices - 奈奎斯特准则对数据采样系统设计有何意义</a><br><a href="https://arm-software.github.io/CMSIS_6/latest/DSP/index.html">CMSIS DSP Software Library</a>  </p>
-]]></content>
-      <categories>
-        <category>知识</category>
-      </categories>
-      <tags>
-        <tag>电子设计</tag>
-        <tag>信号处理</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Hexo+NexT 博客重建日志</title>
-    <url>/2025/02/27/Blog%20building/</url>
-    <content><![CDATA[<h3 id="博客恢复更新啦！"><a href="#博客恢复更新啦！" class="headerlink" title="博客恢复更新啦！"></a>博客恢复更新啦！</h3><p>因 Github 用户名更改为了 Ocelot-Xuan ，Github Pages 域名同步更新为<code>ocelot-xuan.github.io</code>，原有个人域名<code>ocelot.top</code>不变，二者均可访问博客。<br>同时，重建了博客环境，更新 Hexo 内核、NexT 主题版本，将评论系统更换为 Waline 。</p>
-<span id="more"></span>
-<h3 id="重建日志"><a href="#重建日志" class="headerlink" title="重建日志"></a>重建日志</h3><ul>
-<li><p><strong>Hexo 环境搭建、添加搜索、字数统计功能</strong><br><a href="https://zhuanlan.zhihu.com/p/618864711">Hexo+Next主题搭建个人博客+优化全过程</a></p>
-</li>
-<li><p><strong>更换 NexT 主题、外观优化</strong><br><a href="https://theme-next.js.org/docs/getting-started/">NexT官方文档</a></p>
-</li>
-<li><p><strong>添加置顶功能</strong><br><a href="https://zhuanlan.zhihu.com/p/33617563">Hexo博客优化之博文置顶</a></p>
-</li>
-<li><p><strong>添加 Waline 评论系统</strong><br>Waline 是一款轻量评论系统，评论数据默认存储在 LeanCloud，使用 Vercel 作为服务端。<br>它相比 Valine 增加了后端，客户端与 LeanCloud 之间的交互会经由服务端处理，安全性更佳。</p>
-<p><a href="https://waline.js.org/guide/get-started/">Waline官方文档-快速上手</a></p>
-<p>NexT 主题对 Waline 没有官方支持，需要安装插件实现。</p>
-<p><a href="https://blog.csdn.net/jiunian_2761/article/details/122621667">Hexo博客进阶：为 Next 主题添加 Waline 评论系统</a><br><a href="https://www.npmjs.com/package/@waline/hexo-next?activeTab=readme">npm - Next主题Waline插件</a></p>
-<p>另外需要注意，Vercel 提供的服务端域名<code>vercel.app</code>在国内无法直接访问，需要将一个自有域名（子域名亦可）CNAME到<code>cname.vercel-dns.com</code>，之后使用自有域名进行配置和数据传递。详见 Waline 官方手册“绑定域名”一章。</p>
-</li>
-<li><p><strong>添加友链</strong><br>  <a href="https://finisky.github.io/simplestblogroll/">最简单的Hexo友情链接页面定制</a></p>
-</li>
-<li><p><strong>设定 Github Pages 自定义域名 及 域名DNS解析</strong><br><a href="https://www.bandao.ltd/tutorial/github_domain.html">GitHub Pages 自定义域名配置指南</a></p>
-</li>
-<li><p><strong>安装数学公式插件</strong><br><a href="https://github.com/next-theme/hexo-filter-mathjax">Hexo-filter-mathjax</a></p>
-</li>
-</ul>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>Web</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>电子科大信通新生挑战杯参赛后记</title>
-    <url>/2022/10/22/Tiaozhanbei/</url>
-    <content><![CDATA[<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(1).jpg" alt="Tiaozhanbei (1)" style="zoom: 20%;" />
-
-<span id="more"></span>
-
-<br/>
-
-<p>为期近一个月的挑战杯终于结束了。从国庆到10月底，赛程和竞争都比想象中的更紧张、激烈，因此最后的成果也超出了赛前的预期。这次参赛过程可谓跌宕起伏，多灾多难，但也为之后的学习提供了宝贵的经验。</p>
-<p>这里先贴出比赛题目。</p>
-<br/>
-
-<h4 id="D题-智能区域雷达"><a href="#D题-智能区域雷达" class="headerlink" title="D题-智能区域雷达"></a>D题-智能区域雷达</h4><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Requirement.jpg" alt="Requirement" style="zoom: 67%;" />
-
-<br/>
-
-<h4 id="成品效果"><a href="#成品效果" class="headerlink" title="成品效果"></a>成品效果</h4><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(2).jpg" alt="Tiaozhanbei (2)" style="zoom:20%;" />
-
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(3).jpg" alt="Tiaozhanbei (3)" style="zoom:20%;" />
-
-<br/>
-
-<h4 id="电源模块"><a href="#电源模块" class="headerlink" title="电源模块"></a>电源模块</h4><p>对于供电的设计，科协提供了使用7805芯片，学生电源或电池转5V的方案。我们的方案经历了洞洞板 –&gt; PCB，学生电源 –&gt; 电池，最后确定为PCB+7.4V 18650锂电池 转5V的方案。在制作PCB的过程中，学长建议我们做小、加粗线路。同时后期我们发现也要注重7805的散热问题，需在附近留足空间，可选择安装散热片。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(4).jpg" alt="Tiaozhanbei (4)" style="zoom:20%;" />
-
-<p>在安装散热片的过程中，发生了第一次差点炸掉。金属散热片接触到PCB上二极管引脚，产生短路，导致7805温度极高。</p>
-<br/>
-
-<h4 id="测距模块"><a href="#测距模块" class="headerlink" title="测距模块"></a>测距模块</h4><p>测距模块由科协提供，型号US-016，5V。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(5).jpg" alt="Tiaozhanbei (5)" style="zoom:20%;" />
-
-<p>这个模块通过ADC模拟电压返回测量值，所以波动比较大，但做到±1cm左右的精度是没有问题的。并且由于波反射的特性，被测物体最好基本垂直于测距模块，否则容易出现测不到。</p>
-<p>测距模块的视角比较宽，在即将转到物体边缘时也能测到数据。这次采取了取平均值的方式，但不够准确和稳定。学长建议我们采用取最小值，如需要更高精度，可以单独写算法求精确的角度。</p>
-<p>科协提供的另一种测距模块是HC-SR04，这个模块是通过IO返回波的反射状态，监测回波时间来计算距离，这样准确度会更高。后期如用到可以再研究一下该模块的使用。</p>
-<p>测距模块有专用的支架支撑，开头几天支架没有到货，我们先是用快递盒制作了一个支架。后来改造了已有的HC-SR04的支架，用锉刀磨去不合适的部分。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(6).jpg" alt="Tiaozhanbei (6)" style="zoom:20%;" />
-
-<p>在比赛的最后一天，测距模块突然不工作了。后来检查发现是电源板接线错误，把7.4V输入接到了5V输出的针脚，导致7805被短路，直接给系统加了7.4V电压。排查过程中单片机出现过冒烟，但恢复5V后系统功能正常，测距模块和舵机都没有因为超压而烧掉。</p>
-<p>这次事故比较重大，有烧毁关键元器件的风险。之后考虑给电源模块输入针脚添加防呆设计。</p>
-<br/>
-
-<h4 id="舵机"><a href="#舵机" class="headerlink" title="舵机"></a>舵机</h4><p>舵机也是科协提供的，SG90，5V供电，直接从电源模块取电。很不幸的是，还有3天时舵机烧了，于是火速从淘宝买了本地发货的舵机。烧舵机的原因仍不清楚，但不排除和测距模块故障原因相同。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(7).jpg" alt="Tiaozhanbei (7)" style="zoom:20%;" />
-
-<br/>
-
-<h4 id="屏幕"><a href="#屏幕" class="headerlink" title="屏幕"></a>屏幕</h4><p>屏幕的方案首先考虑的是1.44寸TFT屏，但因为HAL库移植不成功，先使用了0.96寸OLED。但后来因为OLED实在太小，只能显示两排字，而且是单色，所以考虑换回TFT屏。有了OLED标准库移植HAL库的经验，TFT屏移植成功，我们绘制了彩色雷达图。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Tiaozhanbei%20(8).jpg" alt="Tiaozhanbei (8)" style="zoom:20%;" />
-
-<p>过程中也尝试了使用U8g2图形库，但由于尚不清楚的原因没有点亮，于是转而使用淘宝店提供的驱动，后面会再次尝试。</p>
-<br/>
-
-<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>这次比赛特别感谢冯神、杨神，也感谢热情好玩的学长们。科技没有尽头，探索不会停止。让我们亲手创造更美好的未来！</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>电子设计</tag>
-        <tag>嵌入式</tag>
-        <tag>STM32</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>装一台10代i3核显 ITX 小主机</title>
-    <url>/2022/03/26/ITX/</url>
-    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(1).jpg" alt="ITX (1)"></p>
-<span id="more"></span>
-
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>本文写于2022&#x2F;3&#x2F;26，约 1200 字，阅读大约需要 3 分钟。</p>
-<p>自从前年矿潮我把580卖掉之后，家里的台式机就变成了 <strong>3500X+亮机卡</strong> 的奇怪组合。关键是闲鱼买的亮机卡太老，驱动兼容性不好，性能也不行，B站看视频都偶尔崩溃，于是决定拆开卖了重新配一台。因为现在基本没有游戏需求了，所以想着装一台核显ITX，把主机移到桌面上来，好让放腿脚的空间更大一些。去年底开始策划新电脑，没赶上双十一，就在双十二入手了这套 <strong>10代i3+核显+H510ITX</strong> 。</p>
-<br/>
-
-<p><strong>详细配置表：</strong></p>
-<p>CPU：<strong>i3 10105</strong>  4核8线程  3.7-4.4GHz</p>
-<p>显卡：UHD630</p>
-<p>主板：铭瑄 MS-挑战者 H510 ITX</p>
-<p>内存：DDR4 16G（8G-3000*2，老电脑拆下来的）</p>
-<p>硬盘：英特尔 760P（也是老电脑拆下来的）</p>
-<p>机箱：游戏帝国 小灵越（自带200W电源）</p>
-<br/>
-
-<p>这台电脑是21年12月购置的，当时这套配置几乎没有悬念，原来的主机二手能卖1500左右，这个价位要买到 新U+ITX板+机箱+电源+散热器，当时12代U还没有上市，10代i3+ITX主板 就在1000左右，加上机箱什么的还能有些富余。如果选 10代i5 要再加300，会有点超支，最后决定还是留给以后升级。而AMD这边则是没有好的选择，带核显的APU 2、3、4代都已经退市，缺货且价格高企。5代APU已经上市的最少都是6核，散片也要上千，不在我们的价格区间。</p>
-<br/>
-
-<h3 id="装机过程"><a href="#装机过程" class="headerlink" title="装机过程"></a>装机过程</h3><p>先看看主板和U：</p>
-<p><strong>i3 10105</strong>，带核显的版本，比屏蔽核显的F版本贵150左右。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(2).jpg" alt="ITX (2)"></p>
-<p>i3发热量很小，所以搭配了一个简单下压式散热 大镰刀S950M 。</p>
-<br/>
-
-<p>主板使用了 <strong>铭瑄 MS-挑战者 H510 ITX</strong> 。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(3).jpg" alt="ITX (3)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(4).jpg" alt="ITX (4)"></p>
-<p>这是一个比较廉价的H510 ITX主板，提供2条内存插槽，6个后置USB（2.0<code>*</code>4 + 3.0<code>*</code>2)，一条M.2 。供电可以比较平稳地带动10代i5不带K的版本，但BIOS比较简陋，适合不折腾直接用的用户，也暂不支持装Win11。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(5).jpg" alt="ITX (5)"></p>
-<p>另外根据电脑吧评测室大佬 C.Y. 的测试，这个主板如果做好MOS散热也可以带11代i5无K版本，高负载要稳定运行则需要通过软件（XTU、throttlestop）解锁功耗墙、CPU降压。</p>
-<p>主板带有 M.2 Wi-Fi 接口，也送了保护罩，但因为H510芯片组 USB2.0 数量限制，用M.2无线网卡 蓝牙会不能用，所以选择了USB无线网卡。</p>
-<br/>
-
-<p>装进机箱：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(6).jpg" alt="ITX (6)"></p>
-<p>ITX机箱采用 <strong>游戏帝国 小灵越 机箱</strong> ，其实就是迎广肖邦的仿制品，价格比较低。前置USB2.0、3.0各一个 + 音频接口 + 读卡器。接口这边侧板是镂空网状，可以帮助散热。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(7).jpg" alt="ITX (7)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(8).jpg" alt="ITX (8)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(9).jpg" alt="ITX (9)"></p>
-<p>机箱自带200W电源，带核显i3完全没有问题。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(10).png" alt="ITX (10)"></p>
-<br/>
-
-<p>另外这个主板只有1个前置USB2.0插针，为了接上机箱的2.0 + 读卡器，还要买一个转接板。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(11).jpg" alt="ITX (11)"></p>
-<br/>
-
-<p>插上所有线，此时线缆是一团乱麻的状态。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(12).jpg" alt="ITX (12)"></p>
-<p>整理好线缆，比较乱也没办法了，机箱小 线缆多，ITX确实不好理线：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(13).jpg" alt="ITX (13)"></p>
-<p>合盖：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(14).jpg" alt="ITX (14)"></p>
-<br/>
-
-<p>最终效果：</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(15).jpg" alt="ITX (15)"></p>
-<br/>
-
-<p>另外介绍一下添置的外设：</p>
-<p>显示器是 <strong>LG的24GN600</strong> ，24寸 1080P 144Hz IPS。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(16).jpg" alt="ITX (16)"></p>
-<p>还有校色报告，最大ΔE&lt;5，色温6500K。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(17).jpg" alt="ITX (17)"></p>
-<br/>
-
-<p>键盘是 <strong>京东京造C2</strong> ，有线104，佳达隆红轴，带白色背光。属于长得比较朴素的键盘，价格200多也不贵。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ITX%20(18).jpg" alt="ITX (18)"></p>
-<br/>
-
-<p>桌面焕然一新 ^o^&#x2F; ，最大的好处是脚下空间腾出来了，可以随意放腿（￣︶￣）</p>
-<p>装好之后的ITX看上去还是很舒服的，小巧不占空间，也显得精致。不玩游戏的话，性能也够用了。这次装机就记录到这里了，感谢观看~</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>电脑</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>ESP8266单片机DIY数码管小时钟</title>
-    <url>/2022/02/17/MCU-Clock/</url>
-    <content><![CDATA[<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(6).jpg" alt="MCU-Clock (6)"  />
-
-<span id="more"></span>
-
-<br/>
-
-<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3><p>一直想做一个DIY小时钟，趁放假时间了解了一下单片机，本想用 ESP8266开发板+1.44寸TFT液晶屏+DHT22温湿度模块 做一个 时间显示+天气预报+当前温湿度显示 小电视，不过需要较多的时间，又临近开学，所以改成了 <strong>ESP8266开发板+4位LED数码管</strong> 的简单时钟，原先的想法就放到暑假来实现。</p>
-<br/>
-
-<h3 id="部件介绍"><a href="#部件介绍" class="headerlink" title="部件介绍"></a>部件介绍</h3><ul>
-<li><strong>ESP8266开发板</strong></li>
-</ul>
-<p>廉价开发板，单板10多块。自带WI-FI，不过只支持2.4G频段。接口是Micro-USB。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(1).jpg" alt="MCU-Clock (1)" style="zoom: 50%;" />
-
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(2).jpg" alt="MCU-Clock (2)" style="zoom:50%;" />
-
-
-
-<ul>
-<li><strong>TM1637 4位LED数码管</strong></li>
-</ul>
-<p>带时钟点的4位LED数码管，3.3v - 5v 供电均可。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(3).jpg" alt="MCU-Clock (3)" style="zoom:50%;" />
-
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(4).jpg" alt="MCU-Clock (4)" style="zoom:50%;" />
-
-
-
-<ul>
-<li><strong>整体效果</strong></li>
-</ul>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(5).jpg" alt="MCU-Clock (5)"  />
-
-<p>使用附带的4根15cm杜邦线连接，稍微有点长，有条件可以用更短的。</p>
-<p>店家送的30cm Micro-USB数据线也不太好用，线材偏硬，不好弯折，会把部件往原来弯折的方向带。推荐用比较细的Micro-USB手机数据线。</p>
-<br/>
-
-<h3 id="软件实现"><a href="#软件实现" class="headerlink" title="软件实现"></a>软件实现</h3><p>从阿里云NTP服务器获取时间，每秒更新一次。</p>
-<p>此处将整体代码分块解释，按顺序连接就是完整代码。</p>
-<ul>
-<li>头文件及初始设置部分</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;ESP8266WiFi.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;NTPClient.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&lt;WiFiUdp.h&gt;</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">include</span> <span class="string">&quot;TM1637.h&quot;</span></span></span><br><span class="line"></span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* ssid     = <span class="string">&quot;ssid&quot;</span>; <span class="comment">//WI-FI名称</span></span><br><span class="line"><span class="type">const</span> <span class="type">char</span>* password = <span class="string">&quot;password&quot;</span>; <span class="comment">//WI-FI密码</span></span><br><span class="line"></span><br><span class="line">WiFiUDP ntpUDP;</span><br><span class="line">NTPClient <span class="title function_">timeClient</span><span class="params">(ntpUDP, <span class="string">&quot;ntp5.aliyun.com&quot;</span>, <span class="number">8</span>*<span class="number">3600</span>)</span>; <span class="comment">//使用阿里云的NTP服务器</span></span><br><span class="line"><span class="comment">//NTP服务设置： 第一个数为时区偏移，单位秒。第二个数（未使用）为更新间隔，单位为毫秒。</span></span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>数码管设置部分</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="meta">#<span class="keyword">define</span> CLK D3 <span class="comment">//数码管CLK接D3口（可变）</span></span></span><br><span class="line"><span class="meta">#<span class="keyword">define</span> DIO D2 <span class="comment">//数码管DIO接D2口（可变）</span></span></span><br><span class="line">TM1637 <span class="title function_">tm1637</span><span class="params">(CLK,DIO)</span>;</span><br><span class="line"></span><br><span class="line"><span class="type">unsigned</span> <span class="type">char</span> ClockPoint = <span class="number">1</span>; <span class="comment">//时钟点设置，1为亮，0为灭</span></span><br><span class="line"><span class="type">int8_t</span> TimeDisp[] = &#123;<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>,<span class="number">0x00</span>&#125;; <span class="comment">//4位显示的内容，先初始化为0</span></span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>主程序（单次执行）部分</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">setup</span><span class="params">()</span> &#123;</span><br><span class="line">  delay(<span class="number">500</span>); </span><br><span class="line">  WiFi.begin(ssid, password); <span class="comment">//连接WI-FI</span></span><br><span class="line">  <span class="keyword">while</span>(WiFi.status() != WL_CONNECTED)&#123;</span><br><span class="line">    delay(<span class="number">500</span>);</span><br><span class="line">  &#125; <span class="comment">//若未连上则等待</span></span><br><span class="line">  </span><br><span class="line">  timeClient.begin();</span><br><span class="line">  tm1637.init(); <span class="comment">//数码管初始化</span></span><br><span class="line">  tm1637.<span class="built_in">set</span>(<span class="number">2</span>); <span class="comment">//数码管显示亮度，0-7 BRIGHT_TYPICAL = 2,BRIGHT_DARKEST = 0,BRIGHTEST = 7</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-
-<ul>
-<li>主程序（重复执行）部分</li>
-</ul>
-<figure class="highlight c"><table><tr><td class="code"><pre><span class="line"><span class="type">void</span> <span class="title function_">loop</span><span class="params">()</span> &#123;</span><br><span class="line">  <span class="keyword">if</span>(ClockPoint)&#123;</span><br><span class="line">    tm1637.point(POINT_ON);</span><br><span class="line">    ClockPoint = <span class="number">0</span>;</span><br><span class="line">  &#125;</span><br><span class="line">  <span class="keyword">else</span> &#123;</span><br><span class="line">    tm1637.point(POINT_OFF); </span><br><span class="line">    ClockPoint = <span class="number">1</span>;</span><br><span class="line">  &#125; <span class="comment">//时钟点 亮1秒灭1秒</span></span><br><span class="line">  </span><br><span class="line">  timeClient.update();</span><br><span class="line">  <span class="type">int</span> hour = timeClient.getHours();</span><br><span class="line">  <span class="type">int</span> minute = timeClient.getMinutes(); <span class="comment">//获取时间</span></span><br><span class="line">    </span><br><span class="line">  TimeDisp[<span class="number">0</span>] = hour / <span class="number">10</span>;</span><br><span class="line">  TimeDisp[<span class="number">1</span>] = hour % <span class="number">10</span>;</span><br><span class="line">  TimeDisp[<span class="number">2</span>] = minute / <span class="number">10</span>;</span><br><span class="line">  TimeDisp[<span class="number">3</span>] = minute % <span class="number">10</span>; <span class="comment">//分解成4位</span></span><br><span class="line">    </span><br><span class="line">  tm1637.display(<span class="number">0</span>,TimeDisp[<span class="number">0</span>]);</span><br><span class="line">  tm1637.display(<span class="number">1</span>,TimeDisp[<span class="number">1</span>]);</span><br><span class="line">  tm1637.display(<span class="number">2</span>,TimeDisp[<span class="number">2</span>]);</span><br><span class="line">  tm1637.display(<span class="number">3</span>,TimeDisp[<span class="number">3</span>]); <span class="comment">//显示上屏</span></span><br><span class="line">    </span><br><span class="line">  delay(<span class="number">1000</span>); <span class="comment">//时间每秒更新一次</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<br/>
-
-<h3 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h3><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/MCU-Clock%20(6).jpg" alt="MCU-Clock (6)"  />
-
-
-
-<p>作为寒假作业的一部分，又完成作业了 ( •̀ ω •́ )✧</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>嵌入式</tag>
-        <tag>ESP8266</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Redmi K30 至尊纪念版 简单开箱体验</title>
-    <url>/2020/08/15/K30%20Ultra/</url>
-    <content><![CDATA[<p>PS：本文也发布在知乎，若博客图片加载缓慢，可<a href="https://zhuanlan.zhihu.com/p/184636957">点击此处</a>前往知乎查看。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(1).jpg" alt="K30 Ultra (1)"></p>
-<span id="more"></span>
-
-<p>8月11日发布会结束之后，依照小米耍猴惯例，立马京东定金下单了 K30 Ultra（至尊纪念版） 8+128 薄荷绿版本。</p>
-<p>14号10点正式开售后，不出所料10万台秒光。所幸提前预定，14号凌晨补完尾款当天到手。</p>
-<p>本文仅限于开箱+体验，没有什么干货。全文约600字，阅读大致需要2分钟。</p>
-<p>文中带机型水印的图片由 Redmi K30 至尊纪念版 拍摄。</p>
-<p>上图！</p>
-<br/>
-
-<h3 id="开箱"><a href="#开箱" class="headerlink" title="开箱"></a>开箱</h3><p>**P1：**2010-2020：10TH ANNIVERSARY（设计精致的包装盒，文字在特定角度光照下会呈现不同彩色，自然光下为银色）</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(2).jpg" alt="K30 Ultra (2)"></p>
-<br/>
-
-<p>**P2：**Designed by Redmi（包装盒背面）</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(3).jpg" alt="K30 Ultra (3)"></p>
-<br/>
-
-<p>**P3：**永远相信美好的事情即将发生（一个纸套，装有卡针 + Type-C to 3.5mm 转接线 + 说明书 + 手机壳）</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(4).jpg" alt="K30 Ultra (4)"></p>
-<br/>
-
-<p>**P4：**薄荷绿配色，光线原因照片颜色偏深，真实颜色请参考官方图。此外整机带壳重量为241g，偏重。(手机壳重28g，不带壳213g）</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(5).jpg" alt="K30 Ultra (5)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(6).jpg" alt="K30 Ultra (6)"></p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(7).jpg" alt="K30 Ultra (7)"></p>
-<br/>
-
-<p>**P5：*<em>电源适配器参数，最高 11V</em>3A&#x3D;33W（由本机微距镜头拍摄）</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(8).jpg" alt="K30 Ultra (8)" style="zoom:25%;" />
-
-<br/>
-
-<p>**P6：**全家福</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(9).jpg" alt="K30 Ultra (9)"></p>
-<br/>
-
-<p>PS：送的耳机据称价值129，JD第三方卖95，应该确实值这个价。不过是3.5mm接口，还得用上手机附带的转接线。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(10).jpg" alt="K30 Ultra (10)"></p>
-<br/>
-
-<h3 id="简单体验"><a href="#简单体验" class="headerlink" title="简单体验"></a>简单体验</h3><p>对于和K30 Pro的对比，个人认为很贴切的评价：缩水的内容（SoC，闪存，IMX686 - IMX682，电池减少200mA等）都还能接受，但是增强的内容（120Hz+双扬声器）感知很强。</p>
-<p>这个价位有120Hz（高帧率下频繁切换应用确实偶有掉帧现象，不清楚是否为联发科SoC优化问题）感知强烈，以及NFC、33W快充和线性马达，MIUI加持下1999（6+128）依然是非常香的。</p>
-<p>PS：正常使用下系统固件占用12GB空间。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(11).jpg" alt="K30 Ultra (11)" style="zoom: 33%;" />
-
-<br/>
-
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(12).jpg" alt="K30 Ultra (12)" style="zoom: 33%;" />
-
-<br/>
-
-<p>象征性跑了安兔兔（不知为何软件连网有问题，测试条件为 连接电源+不装手机壳+空调26°C ）和Andro Bench。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(13).png" alt="K30 Ultra (13)" style="zoom: 33%;" />
-
-<br/>
-
-<p>闪存方面暂不清楚是UFS3.0因为天玑SoC支持不完善而降速，还是确实降级到了UFS2.1，不过内存应该是砍到了LPDDR4X。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(14).jpg" alt="K30 Ultra (14)" style="zoom: 33%;" />
-
-<br/>
-
-<p>最后附送一张充电特效：</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(15).jpg" alt="K30 Ultra (15)" style="zoom: 33%;" />
-
-<br/>
-
-<p>图放完了，话也说完了，就像开头说的，没有什么干货，只是简单开箱。</p>
-<p>那么就到这里，欢迎各位路过的&#x2F;观望的&#x2F;正在抢的&#x2F;已经到手的朋友<a href="https://zhuanlan.zhihu.com/p/184636957">知乎</a>留言交流，也希望想要的朋友能尽早抢到咯。</p>
-<hr>
-<h3 id="2022-08-13-后记"><a href="#2022-08-13-后记" class="headerlink" title="2022&#x2F;08&#x2F;13 - 后记"></a>2022&#x2F;08&#x2F;13 - 后记</h3><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/K30%20Ultra%20(16).jpg" alt="K30 Ultra (16)" style="zoom: 50%;" />
-
-<p><strong>“永远相信美好的事情即将发生”</strong>，这是我在用我的第一台手机 红米Note 1S 时，铺天盖地的宣传语。小米又过生日了，又长了两岁，这次发布的是Redmi K50 Ultra。回顾小米的这两年，可谓蹉跎。不仅是这篇文章所述的这款手机差评不断，被吐槽发热、续航差、厚重，两年前小米提出的问题，<strong>“小米从哪里来？将往哪里去？”</strong>，恐怕依然没有得到回答。</p>
-<p>小米以性价比起家，1999的狂欢让我们铭记。然而近两年小米冲击高端不成，被火龙、BugUI背刺，还发生了烧WI-FI丑闻。小米似乎陷入了性价比、堆料的怪圈，没法摆脱它最初的印记。</p>
-<p>时过境迁，这款手机所使用的升降前摄设计，也随历史的潮流被淘汰，被打孔、屏下替代，Redmi K系列 也凭借 K50 找回了它曾经的辉煌。虽然我如今已不是小米的目标用户，但小米、红米的存在一定让更多的人用上了性能更好、续航更长、屏幕更好的手机。如今的小米，在中端性价比继续领先，在高端联名徕卡，尝试打造差异化卖点。我无法预测小米是否能为自己的品牌 塑造起能担负近万元售价的品牌价值、质感，但我期待在华为被制裁的今天，能有国产科技厂商站出来，引领未来科技产品发展的道路。</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>安卓</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>Happy New Year!</title>
-    <url>/2020/01/01/Happy%20new%20year/</url>
-    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/Hello20S_tiny.png" alt="Hello20S_tiny"></p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-  </entry>
-  <entry>
-    <title>ColorOS7 For Realme X 尝鲜体验感受</title>
-    <url>/2019/12/27/ColorOS7/</url>
-    <content><![CDATA[<p>PS：本文也发布在知乎，若博客图片加载缓慢，可<a href="https://zhuanlan.zhihu.com/p/99846007">点击此处</a>前往知乎查看。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(0).png" alt="ColorOS7-体验 (0)"></p>
-<p>Realme官方于2019年12月22日开启了Realme X 的 ColorOS7 3000人尝鲜报名，由于OPPO机型尝鲜时间更早（11月），知乎上已经有少量体验报告出现，那这里就主要从个人体验方面聊聊吧。</p>
-<span id="more"></span>
-
-<p>不管怎么说，这次大版本更新，感觉到的大变化就只有 <strong>UI和动画</strong> 。不过，确实改了很多，而且有些竟然还不错。上图：（注意看OLD和NEW标识）</p>
-<ul>
-<li><strong>桌面图标</strong></li>
-</ul>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(1).jpg" alt="ColorOS7-体验 (1)"></p>
-<p>​	嗯……图标什么的还是说一下吧。</p>
-<p>​	这次添加了很有意思的 <strong>自定义图标</strong> 功能，可以设置四种不同的图标形状。</p>
-<p>​	以及 “<strong>Art+第三方图标</strong>” ，设计水平<em>可</em> ，姑且给个好评吧~</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(2).jpg" alt="ColorOS7-体验 (2)" style="zoom: 33%;" />
-
-
-
-<ul>
-<li><strong>动画</strong></li>
-</ul>
-<p>然后是 <strong>动画</strong>  。</p>
-<p>这次号称的 <em>非线性动画</em> ，实际体验下来，可以说不尽人意了……</p>
-<p>几个静态和准静态动画（比如说指纹）改的还不错，切换桌面时底部的小圆点会跟着动，好评。（注意看下图白框内）</p>
-<p>充电动画改了几百次了，现在再改，无感。</p>
-<p>最近任务切换动画有Bug，会闪。以及，掉帧……</p>
-<p>所以说，动画什么的，还是看看就好……</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(3).jpg" alt="ColorOS7-体验 (3)"></p>
-<ul>
-<li><strong>控制中心 &amp; Breeno 速览</strong></li>
-</ul>
-<p>Emmm……你没看错，<strong>控制中心</strong> 它又双叒叕改版了( ╯□╰ ) 。最开始是方形图标，后来改成圆形，现在又改一次，还是圆形，但是颜色统一了。</p>
-<p>怎么说呢，感觉半斤八两吧……之前的毛玻璃效果个人感觉还挺不错的。</p>
-<p>然而交互有点倒退，新设置中心不展开只能显示一行图标（之前两行，而且新的不展开时一行显示六个，显得很拥挤），展开也只能显示两行（之前四行），剩余的需要手动划出，不得不说没有那么方便了。</p>
-<p>不过快捷功能的图标换了，真是大快人心~</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(4).jpg" alt="ColorOS7-体验 (4)"></p>
-<ul>
-<li><strong>设置</strong></li>
-</ul>
-<p>先说UI，C7对于 <strong>设置界面的图标</strong> 进行了完全重置，设计水平依然<em>可</em> 。</p>
-<p>然后就是 <strong>Realme实验室</strong> 没了，因为里面唯一的功能暗色模式转正了。以及转正后暗色模式有了定时功能。（之前试用阶段没有，也不知道怎么想的）</p>
-<p>之前说好的 <strong>电池使用曲线</strong> 依然没有。诶诶，要讲信用欸……</p>
-<p><strong>息屏时钟</strong> 样式可以修改了，好评。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(5).jpg" alt="ColorOS7-体验 (5)"></p>
-<ul>
-<li><strong>相机与相册</strong></li>
-</ul>
-<p><strong>相机的UI</strong> 做了更改，切换成48MP的点击次数在之前三次变两次的基础上，进一步减少为一次。</p>
-<p>相册的 <strong>图集</strong> 界面现在一行显示三个（原来两个），终于不会放不下了……</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(6).jpg" alt="ColorOS7-体验 (6)" style="zoom: 33%;" />
-
-
-
-<ul>
-<li><strong>优化&amp;续航</strong></li>
-</ul>
-<p>整体来说，优化更好了，不过看反馈王者荣耀掉帧的问题依然没有解决。</p>
-<p>内存占用上，同样是4G内存，常驻微信、QQ、华为运动健康三个App，C6剩余内存1G左右，C7现在有1.3G左右。</p>
-<p>续航的话，其实C6最近几个版本续航一直捉急，这次好像也没什么改善。</p>
-<ul>
-<li><strong>杂项</strong></li>
-</ul>
-<p>首先，更新了 <strong>安卓10</strong> 。</p>
-<img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(7).jpg" alt="ColorOS7-体验 (7)" style="zoom:25%;" />
-
-<p>然后，根据更新日志，<strong>Breeno</strong> 更新了，<strong>侧边栏</strong> 大改，不过我都不怎么用。（这两个是放在最前面的，可能重心都放在这里了，导致其他功能更新比较少……然而这两个功能个人感觉其实并不是很实用，尤其是 Breeno ……）</p>
-<p>哦对了，<strong>三指截屏</strong> 交互改了，更好用了一点。</p>
-<p>可以和 OPPO、vivo、小米手机互传，暂时用不到。</p>
-<p>以及一大堆其他的，大概没什么用……</p>
-<ul>
-<li><strong>总结</strong></li>
-</ul>
-<p>怎么说呢，这次 ColorOS 7，没有什么惊艳的功能出现，感觉就是小打小闹的更新。又折腾了一遍UI和设计，改一改动画，补了一点刚需功能。而且有些还是以前就翻来覆去改了好几次（比如控制中心，充电动画），现在又拿出来改。</p>
-<p>只改表面（或者说界面），功能更新很少，这样的更新又有什么意义呐，果然 Realme 的系统还是差点火候……</p>
-<p>就这样吧，欢迎到<a href="https://zhuanlan.zhihu.com/p/99846007">知乎</a>留言交流。</p>
-<ul>
-<li><strong>2020&#x2F;04&#x2F;09补充：</strong></li>
-</ul>
-<p>最近一直没有时间做补充，正式版已经更新一段时间了，提供了两套主题（只有图标不同），<strong>默认主题</strong>为下图，上文中主题变为备选“<strong>简约至美</strong>”主题，可在主题商店中切换。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/ColorOS7-%E4%BD%93%E9%AA%8C%20(8).jpg" alt="ColorOS7-体验 (8)"></p>
-<p>另外，现在的系统版本标识已经变为“<strong>realme ui 1.0</strong>”，不过点进“版本信息”依然可以看到是基于ColorOS 7。</p>
-]]></content>
-      <categories>
-        <category>科技</category>
-      </categories>
-      <tags>
-        <tag>安卓</tag>
-      </tags>
-  </entry>
-  <entry>
-    <title>NOIP2018 参赛纪念</title>
-    <url>/2019/04/20/NOIP2018/</url>
-    <content><![CDATA[<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/NOIP2018%20(1).jpg" alt="NOIP2018 (1)"></p>
-<p>↑ 图1：2018年11月，到成电清水河校区参加 NOIP2018 复试。图为西二门 龙湖·时代天街 和还在空载试运行的 有轨电车蓉2号线。当时天街二期仍在建设。</p>
-<span id="more"></span>
-
-<hr>
-<p>当我再来回顾这次旅程的时候，已经是四年后了。当时我学信息竞赛不过半年，来参赛只是体验，自然也就说不上得奖。只是参赛归来不久，我就没有继续学习了。文化课的压力固然是一方面，然而以我在信竞上花费的时间和精力，以及尚不足够的数理能力，现在看来也轮不到得奖。信息竞赛作为我的一项兴趣，影响着我对学校、专业的选择，也直接或间接地促成了我对各种技术的探索。</p>
-<p>从小学到初中、高中，从机器人到程序设计，竞赛考察的方向从动手能力转向分析思考、知识储备。我得到了很多愉快的回忆、也获得了方方面面的思考和启发。进入大学，由于我的专业是信息与通信，所以我也不打算再深入学习编程。四年后再来成电，还能看到记忆中熟悉的事物。想来到这里的初心不变，信息竞赛一程作为道路上的插曲，更坚定了我的想法。新的旅程开始了，有新的探索、新的挑战，也有更多的故事等待着我们。再走进成电校门，在这样一个熟悉又陌生的地方，迎接未来崭新的道路。</p>
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/NOIP2018%20(4).jpg" alt="NOIP2018 (4)"></p>
-<p>↑ 图2：清水河校区，西湖上的拱桥。</p>
-</br>
-
-<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/NOIP2018%20(3).jpg" alt="NOIP2018 (3)"></p>
-<p>↑ 图3：清水河校区，西二门水杉路。</p>
-]]></content>
-      <categories>
-        <category>生活</category>
-      </categories>
-      <tags>
-        <tag>OI</tag>
-      </tags>
-  </entry>
-</search>
+<h4 id="关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言"><a href="#关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言" class="headerlink" title="关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言~"></a>关于FFT的介绍就到这里了，感谢你读完这篇文章！如果文中出现了任何错误，或者你想深入讨论某个知识点，欢迎在评论区留言~</h4><h3 id="4-参考资料"><a href="#4-参考资料" class="headerlink" title="4. 参考资料"></a>4. 参考资料</h3><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/611517669">实战数字信号处理之三 - 从FFT得到幅值和相位信息</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/weixin_45692672/article/details/113797031">FFT与窗函数：信号分析中的关键技术</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/585401909">带通采样定理及其公式推导</a><br><a target="_blank" rel="noopener" href="https://www.analog.com/media/cn/training-seminars/tutorials/mt-002_cn.pdf">Analog Devices - 奈奎斯特准则对数据采样系统设计有何意义</a><br><a target="_blank" rel="noopener" href="https://arm-software.github.io/CMSIS_6/latest/DSP/index.html">CMSIS DSP Software Library</a>  </p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/%E7%94%B5%E5%AD%90%E8%AE%BE%E8%AE%A1/" rel="tag"># 电子设计</a>
+              <a href="/tags/%E4%BF%A1%E5%8F%B7%E5%A4%84%E7%90%86/" rel="tag"># 信号处理</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2025/02/27/Blog%20building/" rel="prev" title="Hexo+NexT 博客重建日志">
+                  <i class="fa fa-angle-left"></i> Hexo+NexT 博客重建日志
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="waline"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 
+    <span itemprop="copyrightYear">2025</span>
+    <span class="with-love">
+      <i class="fa fa-heart"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Zixuan Zhang</span>
+  </div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/sidebar.js"></script><script src="/js/next-boot.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/hexo-generator-searchdb/1.4.1/search.js" integrity="sha256-1kfA5uHPf65M5cphT2dvymhkuyHPQp5A53EGZOnOLmc=" crossorigin="anonymous"></script>
+<script src="/js/third-party/search/local-search.js"></script>
+
+
+
+
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="waline" type="application/json">{"lang":"zh-CN","enable":true,"serverURL":"https://comment.ocelot.top","cssUrl":"https://unpkg.com/@waline/client@v2/dist/waline.css","commentCount":true,"pageview":false,"libUrl":"https://unpkg.com/@waline/client@v2/dist/waline.js","locale":{"placeholder":"欢迎评论，无需登录~"},"emoji":["https://unpkg.com/@waline/emojis@1.0.1/weibo","https://unpkg.com/@waline/emojis@1.0.1/alus","https://unpkg.com/@waline/emojis@1.0.1/bilibili","https://unpkg.com/@waline/emojis@1.0.1/qq","https://unpkg.com/@waline/emojis@1.0.1/tieba","https://unpkg.com/@waline/emojis@1.0.1/tw-emoji"],"meta":["nick"],"requiredMeta":["nick"],"wordLimit":180,"login":"disable","pageSize":10,"el":"#waline","comment":true,"path":"/2025/03/05/FFT-for-beginners/"}</script>
+<link rel="stylesheet" href="https://unpkg.com/@waline/client@v2/dist/waline.css">
+<script>
+document.addEventListener('page:loaded', () => {
+  NexT.utils.loadComments(CONFIG.waline.el).then(() =>
+    NexT.utils.getScript(CONFIG.waline.libUrl, { condition: window.Waline })
+  ).then(() => 
+    Waline.init(Object.assign({}, CONFIG.waline,{ el: document.querySelector(CONFIG.waline.el) }))
+  );
+});
+</script>
+
+</body>
+</html>
