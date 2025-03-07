@@ -6,11 +6,11 @@ date: 2025-02-26 23:08:00
 
 Hello~ 我是Ocelot-XUAN。
 
-科技迷，电子DIY爱好者。日常研究嵌入式开发/电路设计/网络技术……
+科技迷，电子DIY爱好者。日常研究 嵌入式开发 / 电路设计 / 网络技术……
 
 UESTC 网络工程在读，电子设计退役老人。
 
-[**Github**](https://github.com/Ocelot-Xuan) 和 [**微博**](https://weibo.com/u/2379418717) 见侧栏头像下方。
+社交网络：[**Github**](https://github.com/Ocelot-Xuan) &ensp; [**微博**](https://weibo.com/u/2379418717) &ensp; [**知乎**](https://www.zhihu.com/people/ocelot324)
 
 #### 关于本站
 
