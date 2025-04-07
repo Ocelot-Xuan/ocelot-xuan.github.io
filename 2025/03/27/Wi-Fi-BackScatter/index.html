@@ -30,8 +30,14 @@
 <meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_PicoScenes.png">
 <meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_PicoScenes_MATLAB.png">
 <meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_CSI_result_2.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Wireshark_Channel.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_802_11_Frame.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_System_Real_1.jpg">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block_ACK_2_Bitmap.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block%20ACK_1_Bitmap.png">
+<meta property="og:image" content="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block%20ACK_1_Bin_Bit.png">
 <meta property="article:published_time" content="2025-03-27T15:15:00.000Z">
-<meta property="article:modified_time" content="2025-03-27T16:04:07.697Z">
+<meta property="article:modified_time" content="2025-04-07T14:47:59.310Z">
 <meta property="article:author" content="Zixuan Zhang">
 <meta property="article:tag" content="物联网">
 <meta property="article:tag" content="无线通信">
@@ -144,7 +150,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%85%B3%E4%BA%8E%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84"><span class="nav-number">1.</span> <span class="nav-text">1. 关于反向散射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">2. 实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据传输方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%88%A9%E7%94%A8MAC%E5%B1%82%E8%81%9A%E5%90%88%E5%B8%A7%E8%BF%9B%E8%A1%8C%E4%BA%8C%E5%85%83%E8%B0%83%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 利用MAC层聚合帧进行二元调制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84%E6%A0%87%E7%AD%BE%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 反向散射标签设计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AE%BE%E5%A4%87%E5%92%8C%E8%BD%AF%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">3.</span> <span class="nav-text">3. 设备和软硬件环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Wi-Fi-%E6%95%B0%E6%8D%AE%E5%8C%85%E6%94%B6%E5%8F%91%E5%8F%8ACSI%E7%9B%91%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">4. Wi-Fi 数据包收发及CSI监测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93"><span class="nav-number">5.</span> <span class="nav-text">5. 反向散射数据传输</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">6.</span> <span class="nav-text">6. 参考资料</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84%E6%8A%80%E6%9C%AF%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">1. 反向散射技术简介</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%9E%E7%8E%B0%E6%80%9D%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">2. 实现思路</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#2-1-%E6%95%B0%E6%8D%AE%E4%BC%A0%E8%BE%93%E6%96%B9%E5%BC%8F"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 数据传输方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-2-%E5%88%A9%E7%94%A8MAC%E5%B1%82%E8%81%9A%E5%90%88%E5%B8%A7%E8%BF%9B%E8%A1%8C%E4%BA%8C%E5%85%83%E8%B0%83%E5%88%B6"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 利用MAC层聚合帧进行二元调制</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-3-%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84%E6%A0%87%E7%AD%BE%E8%AE%BE%E8%AE%A1"><span class="nav-number">2.3.</span> <span class="nav-text">2.3 反向散射标签设计</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E8%AE%BE%E5%A4%87%E5%92%8C%E8%BD%AF%E7%A1%AC%E4%BB%B6%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">3.</span> <span class="nav-text">3. 设备和软硬件环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-Wi-Fi-%E6%95%B0%E6%8D%AE%E5%8C%85%E6%94%B6%E5%8F%91%E5%8F%8ACSI%E7%9B%91%E6%B5%8B"><span class="nav-number">4.</span> <span class="nav-text">4. Wi-Fi 数据包收发及CSI监测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-802-11-WLAN%E6%8A%A5%E6%96%87%E6%8D%95%E8%8E%B7"><span class="nav-number">5.</span> <span class="nav-text">5. 802.11 WLAN报文捕获</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#6-%E5%8F%8D%E5%90%91%E6%95%A3%E5%B0%84%E6%96%B9%E6%A1%88%E6%B5%8B%E8%AF%95"><span class="nav-number">6.</span> <span class="nav-text">6. 反向散射方案测试</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#7-%E5%8F%82%E8%80%83%E8%B5%84%E6%96%99"><span class="nav-number">7.</span> <span class="nav-text">7. 参考资料</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -241,7 +247,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2025-03-28 00:04:07" itemprop="dateModified" datetime="2025-03-28T00:04:07+08:00">2025-03-28</time>
+      <time title="修改时间：2025-04-07 22:47:59" itemprop="dateModified" datetime="2025-04-07T22:47:59+08:00">2025-04-07</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -274,14 +280,14 @@
         <i class="far fa-file-word"></i>
       </span>
       <span class="post-meta-item-text">本文字数：</span>
-      <span>1.9k</span>
+      <span>2.7k</span>
     </span>
     <span class="post-meta-item" title="阅读时长">
       <span class="post-meta-item-icon">
         <i class="far fa-clock"></i>
       </span>
       <span class="post-meta-item-text">阅读时长 &asymp;</span>
-      <span>3 分钟</span>
+      <span>5 分钟</span>
     </span>
 </div>
 
@@ -296,7 +302,7 @@
     <div class="post-body" itemprop="articleBody"><p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_demo.png" alt="WFBC_demo"></p>
 <span id="more"></span>
 
-<h3 id="1-关于反向散射"><a href="#1-关于反向散射" class="headerlink" title="1. 关于反向散射"></a>1. 关于反向散射</h3><p>待补充…</p>
+<h3 id="1-反向散射技术简介"><a href="#1-反向散射技术简介" class="headerlink" title="1. 反向散射技术简介"></a>1. 反向散射技术简介</h3><p>待补充…</p>
 <h3 id="2-实现思路"><a href="#2-实现思路" class="headerlink" title="2. 实现思路"></a>2. 实现思路</h3><h4 id="2-1-数据传输方式"><a href="#2-1-数据传输方式" class="headerlink" title="2.1 数据传输方式"></a>2.1 数据传输方式</h4><p>  假设局域网内有一台主机A、一个反向散射标签，一台无线AP（或另一台主机B）。在反向散射系统中，如果主机A想获取标签的数据，需要标签将数据调制到局域网中的某个已有的信号上，并由主机接收。</p>
 <p>  比较直观的思路是，使标签改变信号的<strong>幅度</strong>或<strong>相位</strong>，相当于在物理层上对信号进行调幅或调相。但因为标签反射信号的强度远低于原信号，不容易在接收端解析出标签传递的数据。此时我们可以利用802.11协议的 <strong>MAC层帧聚合</strong> 和 <strong>块ACK</strong> 机制，在数据链路层上进行操作<sup>[1]</sup>。</p>
 <h4 id="2-2-利用MAC层聚合帧进行二元调制"><a href="#2-2-利用MAC层聚合帧进行二元调制" class="headerlink" title="2.2 利用MAC层聚合帧进行二元调制"></a>2.2 利用MAC层聚合帧进行二元调制</h4><p>  Wi-Fi 802.11n协议引入了<strong>帧聚合</strong>机制，将多个MAC层PDU帧聚合成一个大型帧（A-MPDU），一次性交付物理层进行传输。使用该方法可以减少封装开销和信道竞争，增大网络吞吐量。</p>
@@ -330,8 +336,28 @@
 <p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_PicoScenes_MATLAB.png" alt="WFBC_PicoScenes_MATLAB"></p>
 <p>  使用 PicoScenes MATLAB Toolbox 解析不同子载波的幅度和相位  </p>
 <p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_CSI_result_2.png" alt="WFBC_CSI_result2"></p>
-<h3 id="5-反向散射数据传输"><a href="#5-反向散射数据传输" class="headerlink" title="5. 反向散射数据传输"></a>5. 反向散射数据传输</h3><p>待补充…</p>
-<h3 id="6-参考资料"><a href="#6-参考资料" class="headerlink" title="6. 参考资料"></a>6. 参考资料</h3><p>[1] Abedi, A., Dehbashi, F., Mazaheri, M.H., Salehi-Abari, O., &amp; Brecht, T. (2020). WiTAG: Seamless WiFi Backscatter Communication. Proceedings of the Annual conference of the ACM Special Interest Group on Data Communication on the applications, technologies, architectures, and protocols for computer communication.</p>
+<h3 id="5-802-11-WLAN报文捕获"><a href="#5-802-11-WLAN报文捕获" class="headerlink" title="5. 802.11 WLAN报文捕获"></a>5. 802.11 WLAN报文捕获</h3><p>在无线网络中使用Wireshark抓包时，网卡默认会将接收到的802.11帧转换为以太网帧&#x2F;数据包显示，无法直接监听802.11帧。为了直接观察WLAN报文，我们需要将网卡置于<strong>监听模式</strong>（Monitor mode）。</p>
+<p>监听模式下，网卡会停止自身数据收发。此时无线环境中所有数据帧都会被网卡接收，不再区分不同的WLAN。</p>
+<p>在Ubuntu系统中，我们可以使用 Aircrack-ng 套件中的 Airmon-ng 工具将网卡切换为监听模式。</p>
+<ul>
+<li><p>Wireshark WLAN（IEEE 802.11）捕获教程<br><a target="_blank" rel="noopener" href="https://wiki.wireshark.org/CaptureSetup/WLAN#80211-filter-modes">CaptureSetup&#x2F;WLAN - Wireshark Wiki</a></p>
+</li>
+<li><p>Airmon-ng 技术文档<br><a target="_blank" rel="noopener" href="https://www.aircrack-ng.org/doku.php?id=airmon-ng">Airmon-ng - Aircrack-ng</a></p>
+</li>
+</ul>
+<p>开启监听模式后，我们需要在Wireshark中选择WLAN所属的信道和频宽。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Wireshark_Channel.png" alt="WFBC_Wireshark_Channel"></p>
+<p>捕获到的802.11帧如下：</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_802_11_Frame.png" alt="WFBC_802_11_Frame"></p>
+<h3 id="6-反向散射方案测试"><a href="#6-反向散射方案测试" class="headerlink" title="6. 反向散射方案测试"></a>6. 反向散射方案测试</h3><p>为检验当前反向散射方案效果，我们使用一台运行Ubuntu系统的电脑作为<strong>客户端</strong>，在一部手机上开启移动热点作为模拟的<strong>路由器端</strong>，<strong>反向散射标签</strong>置于两者之间。由于网卡无法同时收发数据和监听802.11帧，我们额外添加一台电脑用于监听Block ACK。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_System_Real_1.jpg" alt="WFBC_System_Real_1"></p>
+<p>系统测试时，客户端电脑不断向模拟路由器发送数据包，反向散射标签以10Kbps的速率切换干扰和不干扰状态。在监听电脑上观察模拟路由器向客户电脑发送的Block ACK，可以发现当<strong>不开启</strong>反向散射标签时，Block ACK显示子帧基本正常接收。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block_ACK_2_Bitmap.png" alt="WFBC_Block_ACK_2_Bitmap"></p>
+<p>当<strong>开启</strong>反向散射标签，部分子帧被破坏，Block ACK的Bitmap部分出现大量0比特。</p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block%20ACK_1_Bitmap.png" alt="WFBC_Block ACK_1_Bitmap"></p>
+<p><img src="https://xuan-blog-pics-1308720530.cos.ap-chengdu.myqcloud.com/blog-img/WFBC_Block%20ACK_1_Bin_Bit.png" alt="WFBC_Block ACK_1_Bin_Bit"></p>
+<p>监听结果初步验证了当前反向散射方案的可行性，但传输稳定性不佳，误码率高，未达到部分参考文献中展示的效果。该现象可能与传输距离、信道电磁环境、反向散射标签设计等因素有关，我们将在未来持续改进系统设计。</p>
+<h3 id="7-参考资料"><a href="#7-参考资料" class="headerlink" title="7. 参考资料"></a>7. 参考资料</h3><p>[1] Abedi, A., Dehbashi, F., Mazaheri, M.H., Salehi-Abari, O., &amp; Brecht, T. (2020). WiTAG: Seamless WiFi Backscatter Communication. Proceedings of the Annual conference of the ACM Special Interest Group on Data Communication on the applications, technologies, architectures, and protocols for computer communication.</p>
 <p>[2] 付嵩博.反向散射共生通信系统标签波形与检测技术研究[D],2024</p>
 <p>[3] Zhiping Jiang, Tom H. Luan, Xincheng Ren, Dongtao Lv, Han Hao, Jing Wang, Kun Zhao, Wei Xi, Yueshen Xu, Rui Li, Eliminating the Barriers: Demystifying Wi-Fi Baseband Design and Introducing the PicoScenes Wi-Fi Sensing Platform, in IEEE Internet of Things Journal (IEEE IOT-J), doi: 10.1109&#x2F;JIOT.2021.3104666.</p>
 
